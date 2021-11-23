@@ -5,18 +5,31 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
+
     [SerializeField] private Animator animator;
+    private bool isFacingRight = true;
+
+    private Finish finish;
+    private bool _finish = false;
+
+    private LeverArm leverArm;
+    private bool isLeverArm = false;
+
     private float speedX = 0;
     private const float speedMultiplier = 100f;
     private bool isGround = false;
     private bool isJump = false;
-    private bool isFacingRight = true;
+    
+    
     
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        finish = GameObject.FindGameObjectWithTag("Finish").GetComponent<Finish>();
+        _finish = false;
+        leverArm = FindObjectOfType<LeverArm>();
     }
 
     // Update is called once per frame
@@ -41,6 +54,14 @@ public class PlayerController : MonoBehaviour
             isFacingRight = false;
             changeScale();
         }
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {   
+            if(_finish)
+                finish.FinishLever();
+            if(isLeverArm)
+                leverArm.ActivateLeverArm();                
+        }
     }
 
     private void FixedUpdate()
@@ -58,6 +79,32 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGround = true;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) 
+    {
+        if (other.CompareTag("Finish"))
+        {
+            _finish = true;
+        }
+
+        if (other.GetComponent<LeverArm>())
+        {
+            isLeverArm = true;
+        }    
+    }
+
+        private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Finish"))
+        {
+            _finish = false;
+        }
+
+        if (other.GetComponent<LeverArm>())
+        {
+            isLeverArm = false;
         }
     }
 
