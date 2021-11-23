@@ -5,10 +5,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
+    [SerializeField] private Animator animator;
     private float speedX = 0;
-    private float speedMultiplier = 100f;
-    bool isGround = false;
-    bool isJump = false;
+    private const float speedMultiplier = 100f;
+    private bool isGround = false;
+    private bool isJump = false;
+    private bool isFacingRight = true;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -20,10 +23,23 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         speedX = Input.GetAxis("Horizontal");
+        animator.SetFloat("speedX", Mathf.Abs(speedX));
         if(Input.GetKey(KeyCode.W) && isGround)
         {
             isGround = false;
             isJump = true;
+        }
+
+        if(speedX > 0f && !isFacingRight)
+        {
+            isFacingRight = true;
+            changeScale();
+        }
+
+        if (speedX < 0f && isFacingRight)
+        {
+            isFacingRight = false;
+            changeScale();
         }
     }
 
@@ -43,5 +59,12 @@ public class PlayerController : MonoBehaviour
         {
             isGround = true;
         }
+    }
+
+    private void changeScale()
+    {
+        Vector3 playersScale = transform.localScale;
+        playersScale.x *= -1;
+        transform.localScale = playersScale;
     }
 }
