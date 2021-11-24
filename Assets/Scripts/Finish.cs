@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class Finish : MonoBehaviour
 {
-    private bool isActivated = false;
+    private bool _isActivated = false;
 
     public void FinishLever()
     {
-        if(isActivated)
+        if(_isActivated)
             gameObject.SetActive(false);
     }
 
     public void ActivateFinish()
     {
-        isActivated = true;
+        _isActivated = true;
     }
 }

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class FolowingCamera : MonoBehaviour
 {
-    [SerializeField] private Camera cam;
+    [SerializeField] private Camera _cam;
 
     private void LateUpdate()
     {
-        cam.transform.position = new Vector3(transform.position.x, transform.position.y, cam.transform.position.z);
+        _cam.transform.position = new Vector3(transform.position.x, transform.position.y, _cam.transform.position.z);
     }
 }
