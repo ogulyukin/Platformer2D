@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
 
+    [SerializeField] private AudioSource jumpSound;
     [SerializeField] private Animator animator;
     private bool _isFacingRight = true;
 
@@ -37,7 +38,7 @@ public class PlayerController : MonoBehaviour
     {
         _speedX = Input.GetAxis("Horizontal");
         animator.SetFloat("speedX", Mathf.Abs(_speedX));
-        if(Input.GetKey(KeyCode.W) && _isGround)
+        if(Input.GetKeyDown(KeyCode.W) && _isGround)
         {
             _isGround = false;
             _isJump = true;
@@ -71,6 +72,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(new Vector2(0f, 500f));
             _isJump = false;
+            jumpSound.Play();
         }
     }
 
@@ -113,5 +115,6 @@ public class PlayerController : MonoBehaviour
         Vector3 playersScale = transform.localScale;
         playersScale.x *= -1;
         transform.localScale = playersScale;
+        GetComponent<PlayerHeath>().invertSlider(_isFacingRight);
     }
 }

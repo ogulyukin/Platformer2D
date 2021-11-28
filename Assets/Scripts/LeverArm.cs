@@ -14,5 +14,6 @@ public class LeverArm : MonoBehaviour
     public void ActivateLeverArm()
     {
         finish.ActivateFinish();
+        GetComponent<Animator>()?.SetTrigger("activate");
     }
 }

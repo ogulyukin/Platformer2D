@@ -7,15 +7,22 @@ public class OrcController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private float timeToWait = 5;
     private const float _speedMultiplier = 100f;
-    private float _patrolDistanse = 12f;
+    private float _patrolDistanse = 10f;
     private float _speedX = 1;
 
     private Rigidbody2D _rb;
     private Vector2 _leftPosition;
     private Vector2 _rigtPosition;
     private bool _isFacingRight = true;
-    private float _waitTime;
+    private float _waitTime = 0;
+    private bool _isAttack = false;
 
+    public bool IsAttack { get => _isAttack; }
+
+    public void FinishAttack()
+    {
+        _isAttack = false;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -103,6 +110,7 @@ public class OrcController : MonoBehaviour
         Vector3 playersScale = transform.localScale;
         playersScale.x *= -1f;
         transform.localScale = playersScale;
+        GetComponent<OrcHealth>().invertSlider(_isFacingRight);
     }
 
     private void startchasingPlayer()
@@ -111,6 +119,8 @@ public class OrcController : MonoBehaviour
         {
             _speedX = 0f;
             var rand = new System.Random();
+            _isAttack = true;
+            _waitTime = 0f;
             if (rand.Next(0, 3) == 0)
             {
                 animator.SetTrigger("attack");
